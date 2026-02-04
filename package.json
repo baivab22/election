@@ -1,0 +1,30 @@
+{
+  "name": "election-app",
+  "version": "1.0.0",
+  "description": "Election Forum Application - Political Party Platform",
+  "private": true,
+  "scripts": {
+    "install-all": "npm install && npm install --prefix server && npm install --prefix client",
+    "build": "npm run build --prefix client",
+    "build:all": "npm run build && npm run copy-build",
+    "copy-build": "rm -rf public && mkdir -p public && cp -r client/dist/* public/",
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "start": "npm run build:all && npm start --prefix server",
+    "server": "npm start --prefix server",
+    "client": "npm run dev --prefix client",
+    "deploy": "npm run build:all && git add . && git commit -m 'Deploy' && git push origin main"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baivab22/election.git"
+  },
+  "author": "Baivab Bidari",
+  "license": "MIT"
+}
