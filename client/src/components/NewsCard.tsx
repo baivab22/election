@@ -39,12 +39,12 @@ interface NewsCardProps {
 const API_URL = 
   import.meta.env.MODE === 'production'
     ? import.meta.env.VITE_PROD_URL || 'https://ictforumbackend-5.onrender.com/api'
-    : import.meta.env.VITE_DEV_URL || 'http://localhost:8000/api';
+    : import.meta.env.VITE_DEV_URL || 'http://localhost:3000/api';
 
 const API_ASSET_URL = 
   import.meta.env.MODE === 'production'
     ? import.meta.env.VITE_PROD_URL || 'https://ictforumbackend-5.onrender.com/'
-    : import.meta.env.VITE_DEV_URL || 'http://localhost:8000/';
+    : import.meta.env.VITE_DEV_URL || 'http://localhost:3000/';
 
 // Social Media Icons (keep your existing icons)
 const FacebookIcon = ({ size = 18 }: { size?: number }) => (

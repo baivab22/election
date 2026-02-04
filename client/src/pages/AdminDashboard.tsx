@@ -780,7 +780,7 @@ const AdminDashboard: React.FC = () => {
 
   const API_ASSET_URL = import.meta.env.MODE === 'production'
     ? import.meta.env.VITE_PROD_URL || 'https://cpnelection-backend.onrender.com/'
-    : import.meta.env.VITE_DEV_URL || 'http://localhost:8000/';
+    : import.meta.env.VITE_DEV_URL || 'http://localhost:3000/';
 
   const getImageUrl = (post: Post) => {
     if (!post?.image) return '/placeholder-image.jpg';

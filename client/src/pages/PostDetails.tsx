@@ -146,7 +146,7 @@ const PostDetails: React.FC = () => {
   const { t, i18n } = useTranslation();
   const API_URL = import.meta.env.MODE === 'production'
     ? import.meta.env.VITE_PROD_URL || 'https://cpnelection-backend.onrender.com/api'
-    : import.meta.env.VITE_DEV_URL || 'http://localhost:8000/api';
+    : import.meta.env.VITE_DEV_URL || 'http://localhost:3000/api';
   
   const [post, setPost] = useState<Post | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<RelatedPost[]>([]);
@@ -193,7 +193,7 @@ const PostDetails: React.FC = () => {
   
   'https://cpnelection-backend.onrender.com/'
   :
-    import.meta.env.VITE_DEV_URL || 'http://localhost:8000/';
+    import.meta.env.VITE_DEV_URL || 'http://localhost:3000/';
 
   const getImageUrl = () => {
     if (!post?.image) return '/placeholder-image.jpg';

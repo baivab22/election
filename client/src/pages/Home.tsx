@@ -83,7 +83,7 @@ const FeaturedCandidatesSection: React.FC = () => {
     const fetchCandidates = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/candidates?limit=3`
+          `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/candidates?limit=3`
         );
         if (response.ok) {
           const data = await response.json();

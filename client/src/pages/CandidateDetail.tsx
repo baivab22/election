@@ -123,7 +123,7 @@ const CandidateDetailPage: React.FC = () => {
   useEffect(() => {
     const fetchCandidate = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/candidates/${id}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/candidates/${id}`);
         if (!response.ok) throw new Error('Failed to fetch candidate');
         const data = await response.json();
         setCandidate(data.data);

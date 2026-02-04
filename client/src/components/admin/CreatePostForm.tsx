@@ -57,7 +57,7 @@ const CreatePostForm = ({ onSubmit, initialData, isEdit = false }) => {
           // For stored images, construct the full URL
           const API_ASSET_URL = import.meta.env.MODE === 'production'
             ? import.meta.env.VITE_PROD_URL || 'https://ictforumbackend-5.onrender.com/'
-            : import.meta.env.VITE_DEV_URL || 'http://localhost:8000/';
+            : import.meta.env.VITE_DEV_URL || 'http://localhost:3000/';
           setImagePreview(`${API_ASSET_URL}uploads/posts/${initialData.image}`);
         }
       }
