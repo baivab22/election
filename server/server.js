@@ -30,14 +30,20 @@ const corsOptions = {
           'https://ictforum-frontend-j4i4dhx0i-baivabs-projects-31f870fd.vercel.app',
           'https://www.ictforumnepal.com',
           'https://ictforumnepal.com',
-          'https://ictforum-frontend.vercel.app'
+          'https://ictforum-frontend.vercel.app',
+          'https://nepalicommunists.org',
+          'https://www.nepalicommunists.org'
         ]
       : [
           'http://localhost:3000',
           'http://localhost:5173',
+          'http://localhost:5174',
+          'http://localhost:5175',
           'http://localhost:3001',
           'http://127.0.0.1:3000',
           'http://127.0.0.1:5173',
+          'http://127.0.0.1:5174',
+          'http://127.0.0.1:5175',
           'http://127.0.0.1:3001'
         ];
 
@@ -45,8 +51,8 @@ const corsOptions = {
       callback(null, true);
     } else {
       console.log('CORS blocked origin:', origin);
-      // Allow during development, block in production
-      callback(process.env.NODE_ENV === 'production' ? new Error('Not allowed by CORS') : null, true);
+      // Allow all origins during development
+      callback(null, true);
     }
   },
   credentials: true,
@@ -96,12 +102,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   maxAge: '1d', // Cache for 1 day
   etag: true,
   lastModified: true
-}));
-
-// Serve frontend static files from public directory
-app.use(express.static(path.join(__dirname, '../public'), {
-  maxAge: '1h',
-  etag: true
 }));
 
 console.log('Static files served from:', path.join(__dirname, 'uploads'));
@@ -357,6 +357,9 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/posts', require('./routes/posts'));
 app.use('/api/members', require('./routes/member'));
 app.use('/api/candidates', require('./routes/candidates'));
+app.use('/api/candidate-feedback', require('./routes/candidateFeedbackAdmin'));
+// Polling feature routes
+app.use('/api/polls', require('./routes/polls'));
 // Health check route - Enhanced
 app.get('/api/health', (req, res) => {
   res.status(200).json({
@@ -384,15 +387,10 @@ app.get('/api/health', (req, res) => {
 
 // 404 handler
 app.use('*', (req, res) => {
-  // Don't send JSON for non-API routes - serve React app instead
-  if (!req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
-  } else {
-    res.status(404).json({
-      success: false,
-      message: `Route not found: ${req.method} ${req.originalUrl}`
-    });
-  }
+  res.status(404).json({
+    success: false,
+    message: `Route not found: ${req.method} ${req.originalUrl}`
+  });
 });
 
 // Global error handler
@@ -407,21 +405,38 @@ app.use((err, req, res, next) => {
 });
 
 // ===== START SERVER =====
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log('\n========================================');
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🌐 Server accessible at: http://localhost:${PORT}`);
-  console.log(`📁 Uploads directory: ${path.join(__dirname, 'uploads')}`);
-  console.log(`📸 Posts images: ${path.join(__dirname, 'uploads/posts')}`);
-  console.log(`🎥 YouTube Channel: ${YOUTUBE_CHANNEL_ID}`);
-  console.log(`🔑 YouTube API: ${YOUTUBE_API_KEY ? 'Configured' : 'Missing'}`);
-  console.log(`🔒 CORS: ${process.env.NODE_ENV === 'production' ? 'Production domains' : 'Development (localhost)'}`);
-  console.log(`⏱️  Rate Limit: 500 requests/15min`);
-  console.log('========================================\n');
+  console.log(`Server running on ${PORT}`);
 });
+
+// Socket.IO for realtime poll updates
+const { Server } = require('socket.io');
+const io = new Server(server, {
+  cors: {
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'http://localhost:5174',
+      'http://localhost:5175'
+    ],
+    methods: ['GET', 'POST']
+  }
+});
+
+io.on('connection', (socket) => {
+  console.log('Socket connected:', socket.id);
+  socket.on('joinPoll', (pollId) => {
+    socket.join(`poll:${pollId}`);
+  });
+  socket.on('leavePoll', (pollId) => {
+    socket.leave(`poll:${pollId}`);
+  });
+});
+
+// expose io to controllers
+app.set('io', io);
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err, promise) => {

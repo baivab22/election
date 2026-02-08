@@ -14,8 +14,11 @@ import AdminDashboard from './pages/AdminDashboard';
 import NotFound from './pages/NotFound';
 import { MembershipForm } from './pages/memberShipForm';
 import Candidates from './pages/Candidates';
-import CandidateDetail from './pages/CandidateDetail';
+import CandidateDetailPage from './pages/CandidateDetailNew';
+import CandidateRegistrationForm from './pages/CandidateRegistrationForm';
 import FeedbackPage from './pages/Feedback';
+import Polls from './pages/Polls';
+import PollDetail from './pages/PollDetail';
 import { useEffect } from 'react';
 
 const queryClient = new QueryClient();
@@ -54,7 +57,10 @@ const App = () => (
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/candidates" element={<Candidates />} />
-                    <Route path="/candidate/:id" element={<CandidateDetail />} />
+                    <Route path="/candidate/:id" element={<CandidateDetailPage />} />
+                    <Route path="/polls" element={<Polls />} />
+                    <Route path="/polls/:id" element={<PollDetail />} />
+                    <Route path="/candidate-registration" element={<CandidateRegistrationForm />} />
                     <Route path="/membership-form" element={<MembershipForm />} />
                     <Route path="/feedback" element={<FeedbackPage />} />
                     <Route path="*" element={<NotFound />} />
